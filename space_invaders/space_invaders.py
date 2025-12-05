@@ -99,6 +99,8 @@ class Alien:
     def get_points(self):
         return self.points[self.alien_type % 3]
 
+import asyncio
+
 class Game:
     def __init__(self):
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -274,17 +276,18 @@ class Game:
         self.screen.blit(score_text, (WINDOW_WIDTH // 2 - score_text.get_width() // 2, WINDOW_HEIGHT // 2))
         self.screen.blit(restart_text, (WINDOW_WIDTH // 2 - restart_text.get_width() // 2, WINDOW_HEIGHT // 2 + 40))
     
-    def run(self):
+    async def run(self):
         running = True
         while running:
             running = self.handle_input()
             self.update()
             self.draw()
             self.clock.tick(60)
+            await asyncio.sleep(0)  # Critical for pygbag/asyncio
         
         pygame.quit()
         sys.exit()
 
 if __name__ == "__main__":
     game = Game()
-    game.run()
+    asyncio.run(game.run())
